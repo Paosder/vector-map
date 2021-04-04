@@ -1,0 +1,13 @@
+node_modules
+.DS_Store
+.git*
+.idea
+Makefile
+tests/
+src/
+.eslintrc.js
+babel.config.cjs
+esbuild.config.js
+jest.config.cjs
+setup.js
+tsconfig.json

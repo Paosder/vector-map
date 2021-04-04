@@ -8,6 +8,7 @@
     "name": "Paosder",
     "email": "denjaraos@gmail.com"
   },
+  "files": ["dist"],
   "license": "MIT",
   "private": false,
   "devDependencies": {
