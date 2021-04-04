@@ -1,5 +1,5 @@
 {
-  "name": "vector-map",
+  "name": "@paosder/vector-map",
   "type": "module",
   "version": "0.1.0",
   "description": "vector-like map class using es6 map with array.",
