@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import { VectorMap } from '../src/map';
 
 describe('init', () => {
@@ -72,7 +73,7 @@ describe('set', () => {
     const bar = {
       foo: 'foo2',
       bar: 'bar2',
-    }
+    };
 
     map.set(foo, 1);
     map.set(bar, 2);
@@ -139,19 +140,19 @@ describe('iterate', () => {
     data: {
       key: 'foo',
       value: 1,
-    }
+    },
   }, {
     index: 1,
     data: {
       key: 'bar',
       value: 2,
-    }
+    },
   }, {
     index: 2,
     data: {
       key: 'baz',
       value: 3,
-    }
+    },
   }];
 
   beforeAll(() => {
@@ -163,13 +164,13 @@ describe('iterate', () => {
   test('with Symbol.iterator', () => {
     const resultKey = [];
     const resultValue = [];
-  
+
     for (const t of map) {
       resultKey.push(t.key);
       resultValue.push(t.value);
     }
-  
-    expect(resultKey).toEqual(['foo','bar','baz']);
+
+    expect(resultKey).toEqual(['foo', 'bar', 'baz']);
     expect(resultValue).toEqual([1, 2, 3]);
   });
 
@@ -185,12 +186,10 @@ describe('iterate', () => {
   });
 
   test('with map', () => {
-    const result = map.map((data, index) => {
-      return {
-        index,
-        data,
-      }
-    });
+    const result = map.map((data, index) => ({
+      index,
+      data,
+    }));
     expect(result).toEqual(expected);
   });
 
@@ -215,21 +214,21 @@ describe('swap', () => {
     map.set('bar', 2);
     map.set('baz', 3);
   });
-  
+
   test('swapOrder', () => {
     map.swapOrder('foo', 'bar');
-  
+
     expect(map.get('foo')).toEqual(1);
     expect(map.get('bar')).toEqual(2);
-  
+
     const resultKey: Array<string> = [];
     const resultValue: Array<number> = [];
-  
+
     for (const t of map) {
       resultKey.push(t.key);
       resultValue.push(t.value);
     }
-  
+
     expect(resultKey[0]).toEqual('bar');
     expect(resultKey[1]).toEqual('foo');
     expect(resultValue[0]).toEqual(2);
@@ -238,18 +237,18 @@ describe('swap', () => {
 
   test('swapOrder with tail', () => {
     map.swapOrder('foo'); // baz
-    
+
     expect(map.get('foo')).toEqual(1);
     expect(map.get('baz')).toEqual(3);
-  
+
     const resultKey: Array<string> = [];
     const resultValue: Array<number> = [];
-  
+
     for (const t of map) {
       resultKey.push(t.key);
       resultValue.push(t.value);
     }
-  
+
     expect(resultKey[0]).toEqual('baz');
     expect(resultKey[2]).toEqual('foo');
     expect(resultValue[0]).toEqual(3);
@@ -264,7 +263,7 @@ describe('swap', () => {
 
     const resultKey: Array<string> = [];
     const resultValue: Array<number> = [];
-  
+
     for (const t of map) {
       resultKey.push(t.key);
       resultValue.push(t.value);
@@ -284,7 +283,7 @@ describe('swap', () => {
 
     const resultKey: Array<string> = [];
     const resultValue: Array<number> = [];
-  
+
     for (const t of map) {
       resultKey.push(t.key);
       resultValue.push(t.value);

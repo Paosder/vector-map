@@ -1,7 +1,6 @@
 type Source<U, V> = {key: U, value: V};
 
 export class VectorMap<U, V> {
-
   pointer: Map<U, number>;
 
   source: Array<Source<U, V>>;
@@ -12,7 +11,7 @@ export class VectorMap<U, V> {
         return {
           key: el[0],
           value: el[1],
-        }
+        };
       }
       throw Error('wrong type of object');
     }) ?? [];
@@ -41,7 +40,7 @@ export class VectorMap<U, V> {
     return res;
   }
 
-  *[Symbol.iterator]() {
+  * [Symbol.iterator]() {
     for (let i = 0; i < this.source.length; i += 1) {
       yield this.source[i];
     }
@@ -55,7 +54,7 @@ export class VectorMap<U, V> {
     const targetIndex = this.pointer.get(key);
     if (targetIndex === undefined) {
       return false;
-    } else if (targetIndex < this.source.length - 1) {
+    } if (targetIndex < this.source.length - 1) {
       this.swapOrder(key);
     }
     const removed = this.source.pop()!;
@@ -185,7 +184,7 @@ export class VectorMap<U, V> {
       this.pointer.delete(removed.key);
       return removed;
     }
-    return;
+    return undefined;
   }
 
   get size() {
