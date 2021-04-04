@@ -1,14 +1,16 @@
 {
   "name": "@paosder/vector-map",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "vector-like map class using es6 map with array.",
   "main": "dist/index.js",
   "author": {
     "name": "Paosder",
     "email": "denjaraos@gmail.com"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "license": "MIT",
   "private": false,
   "devDependencies": {
