@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import { VectorMap } from '../src/map';
+import { VectorMap, MapSource } from '../src/map';
 
 describe('init', () => {
   test('init with no default object', () => {
@@ -98,6 +98,12 @@ describe('get', () => {
     expect(map.get('baz')).toEqual('foo');
   });
 
+  test('get index', () => {
+    expect(map.getIndex('foo')).toEqual(0);
+    expect(map.getIndex('bar')).toEqual(1);
+    expect(map.getIndex('baz')).toEqual(2);
+  });
+
   test('try to get item which doesn\'t exist', () => {
     expect(map.get('foo2')).toEqual(undefined);
     expect(map.get('foo0')).toEqual(undefined);
@@ -130,6 +136,16 @@ describe('delete', () => {
   test('delete item which doesn\'t exist', () => {
     expect(map.delete('foo2')).toEqual(false);
     expect(map.size).toEqual(3);
+  });
+
+  test('delete item with callback', () => {
+    const callback = (swapped: MapSource<string, string>, deleted: MapSource<string, string>) => {
+      expect(deleted.key).toEqual('bar');
+      expect(deleted.value).toEqual('baz');
+      expect(swapped.key).toEqual('baz');
+      expect(swapped.value).toEqual('foo');
+    };
+    map.delete('bar', callback);
   });
 });
 
@@ -215,8 +231,8 @@ describe('swap', () => {
     map.set('baz', 3);
   });
 
-  test('swapOrder', () => {
-    map.swapOrder('foo', 'bar');
+  test('swapIndex', () => {
+    map.swapIndex('foo', 'bar');
 
     expect(map.get('foo')).toEqual(1);
     expect(map.get('bar')).toEqual(2);
@@ -235,8 +251,8 @@ describe('swap', () => {
     expect(resultValue[1]).toEqual(1);
   });
 
-  test('swapOrder with tail', () => {
-    map.swapOrder('foo'); // baz
+  test('swapIndex with tail', () => {
+    map.swapIndex('foo'); // baz
 
     expect(map.get('foo')).toEqual(1);
     expect(map.get('baz')).toEqual(3);
@@ -296,9 +312,9 @@ describe('swap', () => {
   });
 
   test('try swapOrder with non-exist', () => {
-    expect(() => map.swapOrder('foo2')).toThrowError('Key does not exists');
-    expect(() => map.swapOrder('foo2', 'bar')).toThrowError('Key does not exists');
-    expect(() => map.swapOrder('bar', 'foo2')).toThrowError('Key does not exists');
+    expect(() => map.swapIndex('foo2')).toThrowError('Key does not exists');
+    expect(() => map.swapIndex('foo2', 'bar')).toThrowError('Key does not exists');
+    expect(() => map.swapIndex('bar', 'foo2')).toThrowError('Key does not exists');
   });
 
   test('try swapPointer with non-exist', () => {

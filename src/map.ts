@@ -1,12 +1,12 @@
-type Source<U, V> = {key: U, value: V};
+export type MapSource<U, V> = {key: U, value: V};
 
 export class VectorMap<U, V> {
   pointer: Map<U, number>;
 
-  source: Array<Source<U, V>>;
+  source: Array<MapSource<U, V>>;
 
   constructor(arr?: Array<[U, V]>) {
-    this.source = arr?.map<Source<U, V>>((el) => {
+    this.source = arr?.map<MapSource<U, V>>((el) => {
       if (typeof el === 'object' && el[0] && el[1]) {
         return {
           key: el[0],
@@ -18,13 +18,13 @@ export class VectorMap<U, V> {
     this.pointer = new Map(arr?.map<[U, number]>((el, i) => [el[0], i]));
   }
 
-  forEach(callback: (data: Source<U, V>, index: number, arr: Array<Source<U, V>>) => any) {
+  forEach(callback: (data: MapSource<U, V>, index: number, arr: Array<MapSource<U, V>>) => any) {
     this.pointer.forEach((index) => {
       callback(this.source[index], index, this.source);
     });
   }
 
-  map<T>(mapFunc: (data: Source<U, V>, index: number, arr: Array<Source<U, V>>) => T): Array<T> {
+  map<T>(mapFunc: (data: MapSource<U, V>, index: number, arr: Array<MapSource<U, V>>) => T): Array<T> {
     const result: Array<T> = [];
     this.pointer.forEach((index) => {
       result.push(mapFunc(this.source[index], index, this.source));
@@ -32,7 +32,8 @@ export class VectorMap<U, V> {
     return result;
   }
 
-  reduce<T>(reducer: (acc: T, data: Source<U, V>, index: number, arr: Array<Source<U, V>>) => T, accumulator: T): T {
+  reduce<T>(reducer: (acc: T, data: MapSource<U, V>, index: number,
+    arr: Array<MapSource<U, V>>) => T, accumulator: T): T {
     let res: T = accumulator;
     this.pointer.forEach((index) => {
       res = reducer(res, this.source[index], index, this.source);
@@ -49,15 +50,22 @@ export class VectorMap<U, V> {
   /**
    * Swap item with tail and remove it from map.
    * @param key key.
+   * @param callback calls callback when item swapped with tail.
    */
-  delete(key: U): boolean {
+  delete(key: U, callback?: (swapped: MapSource<U, V>, deleted: MapSource<U, V>) => any): boolean {
     const targetIndex = this.pointer.get(key);
+    let swapped = false;
     if (targetIndex === undefined) {
       return false;
     } if (targetIndex < this.source.length - 1) {
-      this.swapOrder(key);
+      this.swapIndex(key);
+      swapped = true;
     }
     const removed = this.source.pop()!;
+
+    if (callback && swapped) {
+      callback(this.source[targetIndex], removed);
+    }
     // @ts-ignore
     removed.key = undefined;
     this.pointer.delete(key);
@@ -121,7 +129,7 @@ export class VectorMap<U, V> {
    * @param key1 key 1.
    * @param key2 key 2.
    */
-  swapOrder(key1: U, key2?: U) {
+  swapIndex(key1: U, key2?: U) {
     const i1 = this.pointer.get(key1);
     if (i1 === undefined) {
       throw new Error(`Key does not exists: '${key1}'`);
@@ -156,6 +164,14 @@ export class VectorMap<U, V> {
   }
 
   /**
+   * Get index of item.
+   * @param key key.
+   */
+  getIndex(key: U): number | undefined {
+    return this.pointer.get(key);
+  }
+
+  /**
    * add item in map and return its index.
    * @param key key.
    * @param value value.
@@ -178,7 +194,7 @@ export class VectorMap<U, V> {
   /**
    * pop out last item like array.
    */
-  pop(): Source<U, V> | undefined {
+  pop(): MapSource<U, V> | undefined {
     if (this.source.length > 0) {
       const removed = this.source.pop()!;
       this.pointer.delete(removed.key);
