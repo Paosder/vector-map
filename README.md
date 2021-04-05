@@ -1,4 +1,4 @@
-# VectorMap [![Build Status](https://travis-ci.com/Paosder/vector-map.svg?branch=master)](https://travis-ci.com/Paosder/vector-map) [![npm version](https://badge.fury.io/js/%40paosder%2Fvector-map.svg)](https://badge.fury.io/js/%40paosder%2Fvector-map)
+# VectorMap [![Build Status](https://travis-ci.com/Paosder/vector-map.svg?branch=master)](https://travis-ci.com/Paosder/vector-map)  [![codecov](https://codecov.io/gh/Paosder/vector-map/branch/master/graph/badge.svg?token=aBRZ07TSBg)](https://codecov.io/gh/Paosder/vector-map) [![npm version](https://badge.fury.io/js/%40paosder%2Fvector-map.svg)](https://badge.fury.io/js/%40paosder%2Fvector-map)
 
 [![NPM](https://nodei.co/npm/@paosder/vector-map.png)](https://npmjs.org/package/@paosder/vector-map)
 
@@ -9,7 +9,7 @@ It is very efficient to access value via specific key and easy to delete too.
 However, sometimes we need to change item order for use like array or iterable.
 ES6 map cannot swap or change its order before transform to array(ex. `map.entries().forEach(..)`).
 One way to solve this, transform map to array, change its order, then re-transform into map.
-It seems really fair and simple approach, but then real big problems comes: changing its order.
+It seems really fair and simple approach, but then real big problem comes: changing its order.
 We cannot easily find where our item is in array, so we must traverse all items to find where it is and it consumes time complexity O(n).
 Well, if all items were sorted, we can reduce its time complexity to O(logn). However we cannot determine the original map was sorted, and
 we don't want to sort transformed array for just doing swap its order. It's "redundant" and "inefficient".
