@@ -1,6 +1,8 @@
-# VectorMap
-Vector map using map with array.
+# VectorMap [![Build Status](https://travis-ci.com/Paosder/vector-map.svg?branch=master)](https://travis-ci.com/Paosder/vector-map) [![npm version](https://badge.fury.io/js/%40paosder%2Fvector-map.svg)](https://badge.fury.io/js/%40paosder%2Fvector-map)
 
+[![NPM](https://nodei.co/npm/@paosder/vector-map.png)](https://npmjs.org/package/@paosder/vector-map)
+
+Vector map using map with array.
 # Why?
 In ES6, Map is very useful key-value collection object.
 It is very efficient to access value via specific key and easy to delete too.
