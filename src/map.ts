@@ -32,27 +32,32 @@ export class VectorMap<U, V> {
     this.pop = this.pop.bind(this);
   }
 
-  forEach(callback: (data: MapSource<U, V>, index: number, arr: Array<MapSource<U, V>>) => any) {
-    this.pointer.forEach((index) => {
-      callback(this.source[index], index, this.source);
-    });
+  /**
+   * iterate items. Same to Array.forEach in source array.
+   * @param callback callback function to execute every iteration.
+   */
+  forEach(callback: (data: MapSource<U, V>, index: number, arr: Array<MapSource<U, V>>) => any): void {
+    this.source.forEach(callback);
   }
 
+  /**
+   * Generate a new array. Same to Array.map in source array.
+   * @param mapFunc map function to execute every iteration.
+   * @returns Array<T>.
+   */
   map<T>(mapFunc: (data: MapSource<U, V>, index: number, arr: Array<MapSource<U, V>>) => T): Array<T> {
-    const result: Array<T> = [];
-    this.pointer.forEach((index) => {
-      result.push(mapFunc(this.source[index], index, this.source));
-    });
-    return result;
+    return this.source.map(mapFunc);
   }
 
+  /**
+   * Reduce map. Same to Array.reduce in source array.
+   * @param reducer reducer function to execute every iteration.
+   * @param accumulator default value of accumulator.
+   * @returns T
+   */
   reduce<T>(reducer: (acc: T, data: MapSource<U, V>, index: number,
     arr: Array<MapSource<U, V>>) => T, accumulator: T): T {
-    let res: T = accumulator;
-    this.pointer.forEach((index) => {
-      res = reducer(res, this.source[index], index, this.source);
-    });
-    return res;
+    return this.source.reduce(reducer, accumulator);
   }
 
   * [Symbol.iterator]() {
@@ -64,7 +69,9 @@ export class VectorMap<U, V> {
   /**
    * Swap item with tail and remove it from map.
    * @param key key.
-   * @param callback calls callback when item swapped with tail.
+   * @param callback Calls callback when item swapped with tail. Arguments are reference of each item,
+   * and 'key' is the key of map that indicates array index(pointer),
+   * therefore should be careful to not modify 'key' or it could make mangling pointer.
    */
   delete(key: U, callback?: (swapped: MapSource<U, V>, deleted: MapSource<U, V>) => any): boolean {
     const targetIndex = this.pointer.get(key);
@@ -174,11 +181,15 @@ export class VectorMap<U, V> {
     if (targetIndex === undefined) {
       return undefined;
     }
+    if (!this.source[targetIndex]) {
+      throw new Error(`mangling pointer detected.
+      key: '${key}', pointer: '${targetIndex}'.`);
+    }
     return this.source[targetIndex].value;
   }
 
   /**
-   * Get index of item.
+   * Get index(pointer) of item.
    * @param key key.
    */
   getIndex(key: U): number | undefined {
@@ -217,6 +228,9 @@ export class VectorMap<U, V> {
     return undefined;
   }
 
+  /**
+   * Size of map.
+   */
   get size() {
     return this.source.length;
   }

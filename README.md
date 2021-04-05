@@ -6,7 +6,7 @@ In ES6, Map is very useful key-value collection object.
 It is very efficient to access value via specific key and easy to delete too.
 However, sometimes we need to change item order for use like array or iterable.
 ES6 map cannot swap or change its order before transform to array(ex. `map.entries().forEach(..)`).
-One way to solve this, transform map to array, change its order, then re-transform into map. 
+One way to solve this, transform map to array, change its order, then re-transform into map.
 It seems really fair and simple approach, but then real big problems comes: changing its order.
 We cannot easily find where our item is in array, so we must traverse all items to find where it is and it consumes time complexity O(n).
 Well, if all items were sorted, we can reduce its time complexity to O(logn). However we cannot determine the original map was sorted, and
@@ -51,5 +51,8 @@ vectorMap.forEach((el) => {
 // delete item. It swaps with tail element then pop. This will change its order.
 vectorMap.delete('foo');
 
-
+// you can serve swap callback if deleting item is swapped with tail. Only called when swapped.
+vectorMap.delete('bar', (swapped, deleted) => {
+  console.log(swapped.key, swapped.value);
+});
 ```

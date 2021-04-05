@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - "node"
+  - "14"
+env:
+  - CODECOV_TOKEN=3b08990b-5ac5-4abf-abce-d1429787b2b5
+
+after_success:
+  - codecov
