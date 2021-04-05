@@ -16,6 +16,20 @@ export class VectorMap<U, V> {
       throw Error('wrong type of object');
     }) ?? [];
     this.pointer = new Map(arr?.map<[U, number]>((el, i) => [el[0], i]));
+
+    this.forEach = this.forEach.bind(this);
+    this.map = this.map.bind(this);
+    this.reduce = this.reduce.bind(this);
+    this.delete = this.delete.bind(this);
+    this.clear = this.clear.bind(this);
+    this.swap = this.swap.bind(this);
+    this.swapIndex = this.swapIndex.bind(this);
+    this.swapPointer = this.swapPointer.bind(this);
+    this.get = this.get.bind(this);
+    this.set = this.set.bind(this);
+    this.getIndex = this.getIndex.bind(this);
+    this.set = this.set.bind(this);
+    this.pop = this.pop.bind(this);
   }
 
   forEach(callback: (data: MapSource<U, V>, index: number, arr: Array<MapSource<U, V>>) => any) {
