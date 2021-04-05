@@ -12,6 +12,12 @@
   "files": [
     "dist"
   ],
+  "keywords": [
+    "vector",
+    "map",
+    "array",
+    "swap"
+  ],
   "license": "MIT",
   "private": false,
   "devDependencies": {
