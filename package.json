@@ -34,6 +34,7 @@
     "build:source": "node esbuild.config.js",
     "build:type": "tsc --emitDeclarationOnly",
     "build": "yarn build:type && yarn build:source",
+    "prepublish": "yarn test && yarn build",
     "dev": "jest --watchAll",
     "test": "yarn test:coverage && yarn test:lint",
     "test:coverage": "jest --no-cache",
