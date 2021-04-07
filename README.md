@@ -2,7 +2,7 @@
 
 [![NPM](https://nodei.co/npm/@paosder/vector-map.png)](https://npmjs.org/package/@paosder/vector-map)
 
-Vector map using map with array.
+Vector like object using map with array.
 # Why?
 In ES6, Map is very useful key-value collection object.
 It is very efficient to access value via specific key and easy to delete too.
