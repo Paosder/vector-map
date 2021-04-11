@@ -1,6 +1,7 @@
 import { VectorMap } from '@paosder/vector-map';
 import {
-  Attribute, BufferIndex, Color, createAttribute, createProgram, createShader, Coordinate, Quaternion, updateAttribute,
+  BufferIndex, Color, createAttribute, createProgram, createShader,
+  Coordinate, Quaternion, updateAttribute, ObjectBufferIndex, ObjectInfo,
 } from '@common/gl';
 import type { Renderer } from '@common/type';
 import vs from './vert.glsl';
@@ -8,26 +9,13 @@ import fs from './frag.glsl';
 
 const DEFAULT_CUBE_LENGTH = 1000;
 
-interface CubeData {
-  color: Color;
-  position: Coordinate;
-  rotation: Quaternion;
-}
-
-interface CubeBufferIndex {
+interface CubeBufferIndex extends ObjectBufferIndex {
   color: BufferIndex;
-  position: BufferIndex;
-  rotation: BufferIndex;
 }
 
-interface CubeInfo {
-  indices: VectorMap<string, CubeBufferIndex>;
-  color: Attribute;
-  position: Attribute;
-  rotation: Attribute;
-}
+type CubeInfo = ObjectInfo<CubeBufferIndex>;
 
-const CubeAttributes: Array<keyof CubeData> = ['color', 'position', 'rotation'];
+const CubeAttributes: Array<keyof CubeBufferIndex> = ['color', 'position', 'rotation'];
 
 class CubeRenderer implements Renderer {
   cubes: CubeInfo;
@@ -59,6 +47,7 @@ class CubeRenderer implements Renderer {
     gl.useProgram(program);
     this.program = program;
 
+    // create & bind VAO.
     const vao = this.vaoExt.createVertexArrayOES();
     if (!vao) {
       throw new Error('cannot create VAO!');
@@ -124,40 +113,51 @@ class CubeRenderer implements Renderer {
 
     this.cubes = {
       indices: new VectorMap(),
-      color: createAttribute(gl, program, {
-        name: 'a_color',
-        size: 4,
-        usage: gl.DYNAMIC_DRAW,
-        length: DEFAULT_CUBE_LENGTH,
-      }),
-      position: createAttribute(gl, program, {
-        name: 'a_position',
-        size: 3,
-        usage: gl.DYNAMIC_DRAW,
-        length: DEFAULT_CUBE_LENGTH,
-      }),
-      rotation: createAttribute(gl, program, {
-        name: 'a_color',
-        size: 4,
-        usage: gl.DYNAMIC_DRAW,
-        length: DEFAULT_CUBE_LENGTH,
-      }),
+      attributes: {
+        color: createAttribute(gl, program, {
+          name: 'a_color',
+          size: 4,
+          usage: gl.DYNAMIC_DRAW,
+          length: DEFAULT_CUBE_LENGTH,
+        }),
+        position: createAttribute(gl, program, {
+          name: 'a_position',
+          size: 3,
+          usage: gl.DYNAMIC_DRAW,
+          length: DEFAULT_CUBE_LENGTH,
+        }),
+        rotation: createAttribute(gl, program, {
+          name: 'a_rotation',
+          size: 4,
+          usage: gl.DYNAMIC_DRAW,
+          length: DEFAULT_CUBE_LENGTH,
+        }),
+      },
     };
     // prepare for instancing.
-    instanced.vertexAttribDivisorANGLE(this.cubes.color.loc, 1);
-    instanced.vertexAttribDivisorANGLE(this.cubes.position.loc, 1);
-    instanced.vertexAttribDivisorANGLE(this.cubes.rotation.loc, 1);
+    instanced.vertexAttribDivisorANGLE(this.cubes.attributes.color.loc, 1);
+    instanced.vertexAttribDivisorANGLE(this.cubes.attributes.position.loc, 1);
+    instanced.vertexAttribDivisorANGLE(this.cubes.attributes.rotation.loc, 1);
 
     // initialize step finished.
     this.vaoExt.bindVertexArrayOES(null);
   }
 
   updateBuffer() {
-    CubeAttributes.forEach((attr) => {
-      if (this.cubes[attr].isDirty) {
-        updateAttribute(this.gl, this.program, this.cubes[attr]);
+    CubeAttributes.forEach((name) => {
+      if (this.cubes.attributes[name].isDirty) {
+        updateAttribute(this.gl, this.program, this.cubes.attributes[name]);
       }
     });
+  }
+
+  // eslint-disable-next-line
+  add(id: string, options: {
+    color: Color;
+    position: Coordinate;
+    rotation: Quaternion;
+  }) {
+    // TODO
   }
 
   render(lastRendered: string) {

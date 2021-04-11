@@ -1,3 +1,5 @@
+import type { VectorMap } from '@paosder/vector-map';
+
 type ShaderType = WebGLRenderingContext['VERTEX_SHADER'] | WebGLRenderingContext['FRAGMENT_SHADER'];
 
 /**
@@ -117,3 +119,13 @@ export interface BufferIndex {
 export type Color = [r: number, g: number, b: number, a: number];
 export type Coordinate = [x: number, y: number, z: number];
 export type Quaternion = [q1: number, q2: number, q3: number, q4: number];
+
+export interface ObjectBufferIndex {
+  position: BufferIndex;
+  rotation: BufferIndex;
+}
+
+export interface ObjectInfo<T extends ObjectBufferIndex> {
+  indices: VectorMap<string, T>;
+  attributes: Record<keyof T, Attribute>;
+}
