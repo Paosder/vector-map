@@ -33,4 +33,7 @@ module.exports = {
   buildOptions: {
     /* ... */
   },
+  alias: {
+    '@common': './src/common',
+  }
 };
