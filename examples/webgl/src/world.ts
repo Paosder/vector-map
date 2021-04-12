@@ -1,6 +1,8 @@
 import type { Renderer } from '@common/type';
+import { mat4, glMatrix, vec3 } from 'gl-matrix';
 import CubeRenderer from './cube';
 
+glMatrix.setMatrixArrayType(Array);
 class World {
   canvas: HTMLCanvasElement;
 
@@ -11,6 +13,14 @@ class World {
   objects: Array<Renderer>;
 
   lastRendered: string;
+
+  cameraMatrix: mat4;
+
+  eye: vec3;
+
+  lookAt: vec3;
+
+  projectionMatrix: mat4;
 
   constructor(canvasId: string) {
     // create canvas and get gl context.
@@ -42,6 +52,11 @@ class World {
     }
     this.objects = [new CubeRenderer(gl, vaoExt, instanced, 'cube')];
     this.lastRendered = '';
+    this.cameraMatrix = mat4.identity(mat4.create());
+    this.projectionMatrix = mat4.frustum(mat4.create(), -10, 10, -10, 10, 1, 100);
+    this.eye = vec3.fromValues(0, 0, -1);
+    this.lookAt = vec3.fromValues(0, 0, 0);
+    mat4.lookAt(this.cameraMatrix, this.eye, this.lookAt, vec3.fromValues(0, 1, 0));
   }
 
   attach(which: HTMLElement) {
@@ -63,7 +78,7 @@ class World {
     // eslint-disable-next-line no-bitwise
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     this.objects.forEach((renderer) => {
-      this.lastRendered = renderer.render(this.lastRendered);
+      this.lastRendered = renderer.render(this.lastRendered, this.cameraMatrix, this.projectionMatrix);
     });
   }
 }

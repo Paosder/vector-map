@@ -4,6 +4,7 @@ import {
   Coordinate, Quaternion, updateAttribute, ObjectBufferIndex, ObjectInfo,
 } from '@common/gl';
 import type { Renderer } from '@common/type';
+import type { mat4 } from 'gl-matrix';
 import vs from './vert.glsl';
 import fs from './frag.glsl';
 
@@ -160,7 +161,7 @@ class CubeRenderer implements Renderer {
     // TODO
   }
 
-  render(lastRendered: string) {
+  render(lastRendered: string, cameraMat: mat4, projectionMat: mat4) {
     if (lastRendered !== this.uuid) {
       this.gl.useProgram(this.program);
     }

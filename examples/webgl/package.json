@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@paosder/vector-map": "^0.1.6",
-    "canvas-confetti": "^1.2.0"
+    "gl-matrix": "^3.3.0"
   },
   "devDependencies": {
     "@snowpack/plugin-typescript": "^1.2.0",

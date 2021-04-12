@@ -9,10 +9,13 @@ attribute vec3 a_position;
 attribute vec4 a_color;
 attribute vec4 a_rotation;
 
+uniform mat4 u_camera;
+uniform mat4 u_projection;
+
 varying vec4 v_color;
 
 void main() {
-  gl_Position = vec4(a_position * 0.5, 1);
-  gl_PointSize = 10.0;
+  gl_Position = u_camera * u_projection * vec4(a_position + a_surface, 1);
+  v_color = a_rotation; // test
   v_color = a_color;
 }

@@ -14,7 +14,7 @@ module.exports = {
         ...(process.versions.pnp ? { tsc: 'yarn pnpify tsc' } : {}),
       },
     ],
-    ['snowpack-plugin-glslify', { "compress": false }]
+    ['snowpack-plugin-glslify', { "compress": true }]
   ],
   routes: [
     /* Enable an SPA Fallback in development: */
