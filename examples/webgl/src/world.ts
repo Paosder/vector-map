@@ -22,6 +22,10 @@ class World {
 
   projectionMatrix: mat4;
 
+  transformMatrix: mat4;
+
+  isTransformDirty: boolean;
+
   constructor(canvasId: string) {
     // create canvas and get gl context.
     const canvas = document.createElement('canvas');
@@ -57,6 +61,8 @@ class World {
     this.eye = vec3.fromValues(0, 0, -1);
     this.lookAt = vec3.fromValues(0, 0, 0);
     mat4.lookAt(this.cameraMatrix, this.eye, this.lookAt, vec3.fromValues(0, 1, 0));
+    this.transformMatrix = mat4.multiply(mat4.create(), this.cameraMatrix, this.projectionMatrix);
+    this.isTransformDirty = true;
   }
 
   attach(which: HTMLElement) {
@@ -72,13 +78,26 @@ class World {
     }
   }
 
+  setCamera(position: vec3, target: vec3, up: vec3) {
+    this.eye = position;
+    this.lookAt = target;
+    mat4.lookAt(this.cameraMatrix, this.eye, this.lookAt, up);
+    this.isTransformDirty = true;
+  }
+
+  computeTransformMatrix() {
+    return mat4.multiply(this.transformMatrix, this.projectionMatrix, this.cameraMatrix);
+  }
+
   render() {
     this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     this.gl.clearColor(0, 0, 0, 0);
     // eslint-disable-next-line no-bitwise
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+    const transformMat = this.isTransformDirty ? this.computeTransformMatrix() : undefined;
+    this.isTransformDirty = false;
     this.objects.forEach((renderer) => {
-      this.lastRendered = renderer.render(this.lastRendered, this.cameraMatrix, this.projectionMatrix);
+      this.lastRendered = renderer.render(this.lastRendered, transformMat);
     });
   }
 }

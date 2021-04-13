@@ -1,10 +1,10 @@
 import { VectorMap } from '@paosder/vector-map';
 import {
   BufferIndex, Color, createAttribute, createProgram, createShader,
-  Coordinate, Quaternion, updateAttribute, ObjectBufferIndex, ObjectInfo,
+  Coordinate, updateAttribute, ObjectBufferIndex, ObjectInfo, createUniform, addObject, deleteObject, RotationMat,
 } from '@common/gl';
 import type { Renderer } from '@common/type';
-import type { mat4 } from 'gl-matrix';
+import { mat4 } from 'gl-matrix';
 import vs from './vert.glsl';
 import fs from './frag.glsl';
 
@@ -12,14 +12,15 @@ const DEFAULT_CUBE_LENGTH = 1000;
 
 interface CubeBufferIndex extends ObjectBufferIndex {
   color: BufferIndex;
+  size: BufferIndex;
 }
 
 type CubeInfo = ObjectInfo<CubeBufferIndex>;
 
-const CubeAttributes: Array<keyof CubeBufferIndex> = ['color', 'position', 'rotation'];
-
 class CubeRenderer implements Renderer {
   cubes: CubeInfo;
+
+  cubeAttributes: Array<keyof CubeBufferIndex>;
 
   vaoExt: OES_vertex_array_object;
 
@@ -32,6 +33,8 @@ class CubeRenderer implements Renderer {
   program: WebGLProgram;
 
   uuid: string;
+
+  transform: WebGLUniformLocation;
 
   constructor(gl: WebGLRenderingContext, vaoExt: OES_vertex_array_object,
     instanced: ANGLE_instanced_arrays, uuid: string) {
@@ -56,6 +59,8 @@ class CubeRenderer implements Renderer {
     this.vao = vao;
     this.vaoExt.bindVertexArrayOES(this.vao);
 
+    this.transform = createUniform(gl, program, 'u_transform');
+
     // ///////////////////////////////
     // define cube with index buffer.
 
@@ -66,14 +71,14 @@ class CubeRenderer implements Renderer {
       // | 6  | 7
       // 1----2
       // define points.
-      -1, 1, 1, // 0
-      -1, -1, 1, // 1
-      1, -1, 1, // 2
-      1, 1, 1, // 3
-      -1, 1, -1, // 4
-      1, 1, -1, // 5
-      -1, -1, -1, // 6
-      1, -1, -1, // 7
+      -1, 1, -1, // 0
+      -1, -1, -1, // 1
+      1, -1, -1, // 2
+      1, 1, -1, // 3
+      -1, 1, 1, // 4
+      1, 1, 1, // 5
+      -1, -1, 1, // 6
+      1, -1, 1, // 7
     ]);
 
     createAttribute(gl, program, {
@@ -132,42 +137,73 @@ class CubeRenderer implements Renderer {
           size: 4,
           usage: gl.DYNAMIC_DRAW,
           length: DEFAULT_CUBE_LENGTH,
+          matrix: true,
+        }),
+        size: createAttribute(gl, program, {
+          name: 'a_size',
+          size: 1,
+          usage: gl.DYNAMIC_DRAW,
+          length: DEFAULT_CUBE_LENGTH,
         }),
       },
     };
+    this.cubeAttributes = Object.keys(this.cubes.attributes) as Array<keyof CubeBufferIndex>;
+
     // prepare for instancing.
     instanced.vertexAttribDivisorANGLE(this.cubes.attributes.color.loc, 1);
     instanced.vertexAttribDivisorANGLE(this.cubes.attributes.position.loc, 1);
     instanced.vertexAttribDivisorANGLE(this.cubes.attributes.rotation.loc, 1);
+    instanced.vertexAttribDivisorANGLE(this.cubes.attributes.rotation.loc + 1, 1);
+    instanced.vertexAttribDivisorANGLE(this.cubes.attributes.rotation.loc + 2, 1);
+    instanced.vertexAttribDivisorANGLE(this.cubes.attributes.rotation.loc + 3, 1);
+    instanced.vertexAttribDivisorANGLE(this.cubes.attributes.size.loc, 1);
 
     // initialize step finished.
     this.vaoExt.bindVertexArrayOES(null);
+
+    this.add('1', {
+      color: [1, 0, 0, 0.75],
+      position: [0, 0, 0],
+      rotation: mat4.identity(mat4.create()) as RotationMat,
+      size: [1],
+    });
   }
 
   updateBuffer() {
-    CubeAttributes.forEach((name) => {
+    this.cubeAttributes.forEach((name) => {
       if (this.cubes.attributes[name].isDirty) {
+        console.log(name);
         updateAttribute(this.gl, this.program, this.cubes.attributes[name]);
       }
     });
   }
 
-  // eslint-disable-next-line
   add(id: string, options: {
     color: Color;
     position: Coordinate;
-    rotation: Quaternion;
+    rotation: RotationMat;
+    size: [number];
   }) {
-    // TODO
+    addObject(this.cubes, id, options);
   }
 
-  render(lastRendered: string, cameraMat: mat4, projectionMat: mat4) {
+  delete(id: string) {
+    // execute swap & delete.
+    deleteObject(this.cubes, id);
+  }
+
+  render(lastRendered: string, transformMat?: mat4) {
     if (lastRendered !== this.uuid) {
       this.gl.useProgram(this.program);
     }
     this.vaoExt.bindVertexArrayOES(this.vao);
 
     this.updateBuffer();
+    if (transformMat) {
+      this.gl.uniformMatrix4fv(this.transform, false, transformMat);
+      console.log(transformMat);
+    }
+
     if (this.cubes.indices.size > 0) {
       this.instanced.drawElementsInstancedANGLE(this.gl.TRIANGLES, 36,
         this.gl.UNSIGNED_SHORT, 0, this.cubes.indices.size);
