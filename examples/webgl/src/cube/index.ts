@@ -4,7 +4,7 @@ import {
   Coordinate, updateAttribute, ObjectBufferIndex, ObjectInfo, createUniform, addObject, deleteObject, RotationMat,
 } from '@common/gl';
 import type { Renderer } from '@common/type';
-import { mat4 } from 'gl-matrix';
+import type { mat4 } from 'gl-matrix';
 import vs from './vert.glsl';
 import fs from './frag.glsl';
 
@@ -71,14 +71,14 @@ class CubeRenderer implements Renderer {
       // | 6  | 7
       // 1----2
       // define points.
-      -1, 1, -1, // 0
-      -1, -1, -1, // 1
-      1, -1, -1, // 2
-      1, 1, -1, // 3
-      -1, 1, 1, // 4
-      1, 1, 1, // 5
-      -1, -1, 1, // 6
-      1, -1, 1, // 7
+      -0.5, 0.5, -0.5, // 0
+      -0.5, -0.5, -0.5, // 1
+      0.5, -0.5, -0.5, // 2
+      0.5, 0.5, -0.5, // 3
+      -0.5, 0.5, 0.5, // 4
+      0.5, 0.5, 0.5, // 5
+      -0.5, -0.5, 0.5, // 6
+      0.5, -0.5, 0.5, // 7
     ]);
 
     createAttribute(gl, program, {
@@ -160,19 +160,11 @@ class CubeRenderer implements Renderer {
 
     // initialize step finished.
     this.vaoExt.bindVertexArrayOES(null);
-
-    this.add('1', {
-      color: [1, 0, 0, 0.75],
-      position: [0, 0, 0],
-      rotation: mat4.identity(mat4.create()) as RotationMat,
-      size: [1],
-    });
   }
 
   updateBuffer() {
     this.cubeAttributes.forEach((name) => {
       if (this.cubes.attributes[name].isDirty) {
-        console.log(name);
         updateAttribute(this.gl, this.program, this.cubes.attributes[name]);
       }
     });
@@ -201,7 +193,6 @@ class CubeRenderer implements Renderer {
     this.updateBuffer();
     if (transformMat) {
       this.gl.uniformMatrix4fv(this.transform, false, transformMat);
-      console.log(transformMat);
     }
 
     if (this.cubes.indices.size > 0) {

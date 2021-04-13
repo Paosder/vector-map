@@ -1,5 +1,4 @@
 import type { VectorMap } from '@paosder/vector-map';
-import type { mat4 } from 'gl-matrix';
 
 type ShaderType = WebGLRenderingContext['VERTEX_SHADER'] | WebGLRenderingContext['FRAGMENT_SHADER'];
 
@@ -167,7 +166,7 @@ export function addObject<T extends ObjectBufferIndex>(objectInfo: ObjectInfo<T>
       index,
       length,
     };
-    if (targetAttribute.arr.length < index) {
+    if (targetAttribute.arr.length <= index + length) {
       // length exceeded. We need to re-aollocate array.
       // new array has double length.
       const newArr = new Float32Array(targetAttribute.arr.length * 2);
@@ -179,7 +178,6 @@ export function addObject<T extends ObjectBufferIndex>(objectInfo: ObjectInfo<T>
     }
     // set new data.
     targetAttribute.arr.set(_data, index);
-    console.log(targetAttribute.arr);
     targetAttribute.isDirty = true;
   });
 

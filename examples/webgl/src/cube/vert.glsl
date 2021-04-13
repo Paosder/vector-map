@@ -16,6 +16,5 @@ varying vec4 v_color;
 
 void main() {
   gl_Position = u_transform * a_rotation * vec4((a_position + a_surface) * a_size, 1);
-  gl_Position = u_transform * a_rotation * vec4((a_position + a_surface) * a_size, 1);
   v_color = a_color;
 }

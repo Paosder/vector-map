@@ -1,4 +1,5 @@
 import type { Renderer } from '@common/type';
+import { VectorMap } from '@paosder/vector-map';
 import { mat4, glMatrix, vec3 } from 'gl-matrix';
 import CubeRenderer from './cube';
 
@@ -10,7 +11,7 @@ class World {
 
   gl: WebGLRenderingContext;
 
-  objects: Array<Renderer>;
+  objects: VectorMap<string, Renderer>;
 
   lastRendered: string;
 
@@ -54,21 +55,22 @@ class World {
     if (!(vaoExt && instanced)) {
       throw new Error('cannot use extensions!: VAO or instanced_arrays.');
     }
-    this.objects = [new CubeRenderer(gl, vaoExt, instanced, 'cube')];
+    this.objects = new VectorMap();
+    this.objects.set('cube', new CubeRenderer(gl, vaoExt, instanced, 'cube'));
     this.lastRendered = '';
     this.cameraMatrix = mat4.identity(mat4.create());
-    this.projectionMatrix = mat4.frustum(mat4.create(), -10, 10, -10, 10, 1, 100);
-    this.eye = vec3.fromValues(0, 0, -1);
-    this.lookAt = vec3.fromValues(0, 0, 0);
+    this.projectionMatrix = mat4.perspective(mat4.create(),
+      Math.PI * 0.5, this.gl.canvas.width / this.gl.canvas.height, 1, 100);
+    this.eye = vec3.fromValues(3, 3, 5);
+    this.lookAt = vec3.fromValues(1, 1, 0);
     mat4.lookAt(this.cameraMatrix, this.eye, this.lookAt, vec3.fromValues(0, 1, 0));
-    this.transformMatrix = mat4.multiply(mat4.create(), this.cameraMatrix, this.projectionMatrix);
+    this.transformMatrix = mat4.multiply(mat4.create(), this.projectionMatrix, this.cameraMatrix);
     this.isTransformDirty = true;
   }
 
   attach(which: HTMLElement) {
     which.appendChild(this.canvas);
     this.attached = true;
-    console.log('attached.');
   }
 
   detach() {
@@ -97,7 +99,7 @@ class World {
     const transformMat = this.isTransformDirty ? this.computeTransformMatrix() : undefined;
     this.isTransformDirty = false;
     this.objects.forEach((renderer) => {
-      this.lastRendered = renderer.render(this.lastRendered, transformMat);
+      this.lastRendered = renderer.value.render(this.lastRendered, transformMat);
     });
   }
 }
