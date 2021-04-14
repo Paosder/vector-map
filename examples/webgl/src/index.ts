@@ -1,5 +1,5 @@
 import type { RotationMat } from '@common/gl';
-import { mat4, quat, vec4 } from 'gl-matrix';
+import { mat4, quat } from 'gl-matrix';
 import type CubeRenderer from './cube';
 import CubeWorld from './world';
 
