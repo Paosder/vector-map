@@ -1,7 +1,8 @@
 import { VectorMap } from '@paosder/vector-map';
 import {
   BufferIndex, Color, createAttribute, createProgram, createShader,
-  Coordinate, updateAttribute, ObjectBufferIndex, ObjectInfo, createUniform, addObject, deleteObject, RotationMat,
+  Coordinate, updateAttribute, ObjectBufferIndex, ObjectInfo, createUniform, addObject,
+  deleteObject, RotationMat, modifyObject,
 } from '@common/gl';
 import type { Renderer } from '@common/type';
 import type { mat4 } from 'gl-matrix';
@@ -177,6 +178,15 @@ class CubeRenderer implements Renderer {
     size: [number];
   }) {
     addObject(this.cubes, id, options);
+  }
+
+  modify(id: string, options: Partial<{
+    color: Color;
+    position: Coordinate;
+    rotation: RotationMat;
+    size: [number];
+  }>) {
+    modifyObject(this.cubes, id, options);
   }
 
   delete(id: string) {

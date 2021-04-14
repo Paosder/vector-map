@@ -32,10 +32,7 @@ export type Quaternion = [q1: number, q2: number, q3: number, q4: number];
 export type RotationMat = [number, number, number, number, number, number, number,
   number, number, number, number, number, number, number, number, number];
 
-export interface ObjectBufferIndex {
-  position: BufferIndex;
-  rotation: BufferIndex;
-}
+export type ObjectBufferIndex = Record<string, BufferIndex>;
 
 export interface ObjectInfo<T extends ObjectBufferIndex> {
   indices: VectorMap<string, T>;
@@ -159,7 +156,7 @@ export function addObject<T extends ObjectBufferIndex>(objectInfo: ObjectInfo<T>
   id: string, data: Record<keyof T, Array<number>>) {
   const objectIndex: any = {};
   Object.entries(data).forEach(([key, _data]) => {
-    const targetAttribute = objectInfo.attributes[key as keyof Record<keyof T, Attribute>];
+    const targetAttribute = objectInfo.attributes[key];
     const length = targetAttribute.size;
     const index = objectInfo.indices.size * length;
     objectIndex[key] = {
@@ -186,9 +183,27 @@ export function addObject<T extends ObjectBufferIndex>(objectInfo: ObjectInfo<T>
 
 export function modifyObject<T extends ObjectBufferIndex>(objectInfo: ObjectInfo<T>,
   id: string, data: Record<Partial<keyof T>, Array<number>>) {
-
+  const target = objectInfo.indices.get(id);
+  if (!target) {
+    console.warn(`trying to modify unknown object: '${id}'.`);
+    return;
+  }
+  Object.entries(data).forEach(([key, _data]) => {
+    const targetAttribute = objectInfo.attributes[key];
+    targetAttribute.arr.set(_data.slice(0, target[key].length), target[key].index);
+    targetAttribute.isDirty = true;
+  });
 }
 
 export function deleteObject<T extends ObjectBufferIndex>(objectInfo: ObjectInfo<T>, id: string) {
-
+  objectInfo.indices.delete(id, (swapped, deleted) => {
+    Object.keys(deleted.value).forEach((key) => {
+      const targetAttribute = objectInfo.attributes[key];
+      for (let i = 0; i < deleted.value[key].length; i += 1) {
+        targetAttribute.arr[deleted.value[key].index + i] = targetAttribute.arr[swapped.value[key].index + i];
+      }
+      swapped.value[key].index = deleted.value[key].index;
+      targetAttribute.isDirty = true;
+    });
+  });
 }

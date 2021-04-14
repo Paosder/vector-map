@@ -7,25 +7,25 @@ glMatrix.setMatrixArrayType(Array);
 class World {
   canvas: HTMLCanvasElement;
 
-  attached: boolean;
-
-  gl: WebGLRenderingContext;
-
   objects: VectorMap<string, Renderer>;
 
-  lastRendered: string;
+  private attached: boolean;
 
-  cameraMatrix: mat4;
+  private gl: WebGLRenderingContext;
 
-  eye: vec3;
+  private lastRendered: string;
 
-  lookAt: vec3;
+  private cameraMatrix: mat4;
 
-  projectionMatrix: mat4;
+  private eye: vec3;
 
-  transformMatrix: mat4;
+  private lookAt: vec3;
 
-  isTransformDirty: boolean;
+  private projectionMatrix: mat4;
+
+  private transformMatrix: mat4;
+
+  private isTransformDirty: boolean;
 
   constructor(canvasId: string) {
     // create canvas and get gl context.
@@ -41,6 +41,7 @@ class World {
     canvas.width = 500;
     canvas.height = 500;
     canvas.style.border = '1px solid black';
+    canvas.style.backgroundColor = 'black';
     canvas.style.touchAction = 'none';
     canvas.id = canvasId;
 
@@ -50,6 +51,14 @@ class World {
 
     // enable gl extension & depth test.
     gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.BLEND);
+    gl.blendEquation(gl.FUNC_ADD);
+    gl.blendFuncSeparate(
+      gl.SRC_ALPHA,
+      gl.ONE_MINUS_SRC_ALPHA,
+      gl.ONE,
+      gl.ONE_MINUS_SRC_ALPHA,
+    );
     const vaoExt = gl.getExtension('OES_vertex_array_object');
     const instanced = gl.getExtension('ANGLE_instanced_arrays');
     if (!(vaoExt && instanced)) {
@@ -60,7 +69,7 @@ class World {
     this.lastRendered = '';
     this.cameraMatrix = mat4.identity(mat4.create());
     this.projectionMatrix = mat4.perspective(mat4.create(),
-      Math.PI * 0.5, this.gl.canvas.width / this.gl.canvas.height, 1, 100);
+      Math.PI * 0.5, this.gl.canvas.width / this.gl.canvas.height, 1, Infinity);
     this.eye = vec3.fromValues(3, 3, 5);
     this.lookAt = vec3.fromValues(1, 1, 0);
     mat4.lookAt(this.cameraMatrix, this.eye, this.lookAt, vec3.fromValues(0, 1, 0));
