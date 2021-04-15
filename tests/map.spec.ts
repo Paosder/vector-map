@@ -386,3 +386,25 @@ describe('pop', () => {
     expect(newMap.size).toEqual(0);
   });
 });
+
+describe('special situations', () => {
+  test('try to make mangling pointer', () => {
+    const map = new VectorMap<string, string>();
+    map.set('foo', 'bar');
+    map.set('bar', 'baz');
+    map.set('baz', 'foo');
+
+    map.delete('bar', (swapped) => {
+      // source of baz indicates bar.
+      swapped.key = 'bar';
+    });
+    // key of baz pointing at 1.
+
+    // then swap again.
+    map.delete('foo');
+
+    // Because of swap Index, key of bar(the dangling pointer) pointing at 0 instead of baz(still pointing at 1).
+    // baz -> 1 -> index error -> mangling pointer!
+    expect(() => map.get('baz')).toThrowError('mangling pointer');
+  });
+});
