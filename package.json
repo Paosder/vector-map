@@ -3,8 +3,8 @@
   "homepage": "https://github.com/Paosder/vector-map",
   "version": "0.1.8",
   "description": "vector-like map class using es6 map with array.",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "author": {
     "name": "Paosder",
     "email": "denjaraos@gmail.com"
