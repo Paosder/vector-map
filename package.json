@@ -1,10 +1,10 @@
 {
   "name": "@paosder/vector-map",
-  "type": "module",
   "homepage": "https://github.com/Paosder/vector-map",
   "version": "0.1.7",
   "description": "vector-like map class using es6 map with array.",
   "main": "dist/index.js",
+  "module": "dist/index.esm.js",
   "author": {
     "name": "Paosder",
     "email": "denjaraos@gmail.com"
@@ -39,9 +39,10 @@
     "typescript": "^4.2.3"
   },
   "scripts": {
-    "build:source": "node esbuild.config.js",
+    "clean": "rimraf dist/* && rimraf tsconfig.tsbuildinfo",
+    "build:source": "node esbuild.config.mjs",
     "build:type": "tsc --emitDeclarationOnly",
-    "build": "yarn build:type && yarn build:source",
+    "build": "yarn clean && yarn build:type && yarn build:source && rimraf dist/test",
     "prepublish": "yarn test && yarn build",
     "dev": "jest --watchAll",
     "test": "yarn test:coverage && yarn test:lint",
