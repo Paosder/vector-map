@@ -19,6 +19,7 @@ esbuild.build({
   entryPoints: ['src/index.ts'],
   bundle: true,
   format: 'cjs',
+  target: 'es6',
   sourcemap: true,
   outfile: 'dist/cjs/index.js',
   plugins: [],
