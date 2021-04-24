@@ -111,6 +111,40 @@ describe('get', () => {
   });
 });
 
+describe('getters', () => {
+  const map = new VectorMap<string, string>();
+
+  beforeAll(() => {
+    map.set('foo', 'bar');
+    map.set('bar', 'baz');
+    map.set('baz', 'foo');
+  });
+
+  test('head', () => {
+    expect(map.head).toEqual({
+      key: 'foo',
+      value: 'bar',
+    });
+  });
+
+  test('head with empty map', () => {
+    const newMap = new VectorMap<string, string>();
+    expect(newMap.head).toBeUndefined();
+  });
+
+  test('tail', () => {
+    expect(map.tail).toEqual({
+      key: 'baz',
+      value: 'foo',
+    });
+  });
+
+  test('tail with empty map', () => {
+    const newMap = new VectorMap<string, string>();
+    expect(newMap.tail).toBeUndefined();
+  });
+});
+
 describe('delete', () => {
   const map = new VectorMap<string, string>();
 
@@ -207,6 +241,26 @@ describe('iterate', () => {
       data,
     }));
     expect(result).toEqual(expected);
+  });
+
+  test('with some [true]', () => {
+    const result = map.some((data) => {
+      if (data.key === 'bar' && data.value === 2) {
+        return true;
+      }
+      return false;
+    });
+    expect(result).toEqual(true);
+  });
+
+  test('with some [false]', () => {
+    const result = map.some((data) => {
+      if (data.key === 'baz' && data.value === 0) {
+        return true;
+      }
+      return false;
+    });
+    expect(result).toEqual(false);
   });
 
   test('with reduce', () => {

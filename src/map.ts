@@ -50,6 +50,35 @@ export class VectorMap<U, V> {
   }
 
   /**
+   * Equivalent to Array.some.
+   * @param someFunc function to execute every iteration. Must return boolean type.
+   * @returns boolean.
+   */
+  some(someFunc: (data: MapSource<U, V>, index: number, arr: Array<MapSource<U, V>>) => boolean): boolean {
+    return this.source.some(someFunc);
+  }
+
+  /**
+   * get head of map.
+   */
+  get head(): MapSource<U, V> | undefined {
+    if (this.source.length > 0) {
+      return this.source[0];
+    }
+    return undefined;
+  }
+
+  /**
+   * get tail of map.
+   */
+  get tail(): MapSource<U, V> | undefined {
+    if (this.source.length > 0) {
+      return this.source[this.source.length - 1];
+    }
+    return undefined;
+  }
+
+  /**
    * Reduce map. Same to Array.reduce in source array.
    * @param reducer reducer function to execute every iteration.
    * @param accumulator default value of accumulator.
