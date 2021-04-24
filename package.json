@@ -1,7 +1,7 @@
 {
   "name": "@paosder/vector-map",
   "homepage": "https://github.com/Paosder/vector-map",
-  "version": "0.1.10",
+  "version": "0.2.0",
   "description": "vector-like map class using es6 map with array.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
