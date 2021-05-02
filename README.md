@@ -58,3 +58,7 @@ vectorMap.delete('bar', (swapped, deleted) => {
   console.log(swapped.key, swapped.value);
 });
 ```
+
+## API Reference
+
+https://paosder.github.io/vector-map/index.html
