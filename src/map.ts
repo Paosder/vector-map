@@ -1,10 +1,31 @@
+/**
+ * MapSource object.
+ *
+ * This is the inner object which VectorMap uses to manage data.
+ * Some methods return MapSource object reference directly,
+ * this means you can modify it yourself if you needed.
+ * But modifying `key` is strongly discouraged because
+ * it could make a mangling pointer.
+ */
 export type MapSource<U, V> = {key: U, value: V};
 
 export class VectorMap<U, V> {
+  /**
+   * Pointer map.
+   *
+   * It contains an index of the source array to access the target directly.
+   */
   pointer: Map<U, number>;
 
+  /**
+   * Data source array.
+   */
   source: Array<MapSource<U, V>>;
 
+  /**
+   * Create a new VectorMap.
+   * @param arr Initial data which has pairs of key and value.
+   */
   constructor(arr?: Array<[U, V]>) {
     this.source = arr?.map<MapSource<U, V>>((el) => {
       if (typeof el === 'object' && el[0] && el[1]) {
@@ -33,7 +54,7 @@ export class VectorMap<U, V> {
   }
 
   /**
-   * iterate items. Same to Array.forEach in source array.
+   * Iterate items. Same to Array.forEach in source array.
    * @param callback callback function to execute every iteration.
    */
   forEach(callback: (data: MapSource<U, V>, index: number, arr: Array<MapSource<U, V>>) => any): void {
@@ -59,7 +80,7 @@ export class VectorMap<U, V> {
   }
 
   /**
-   * get head of map.
+   * Get head of map.
    */
   get head(): MapSource<U, V> | undefined {
     if (this.source.length > 0) {
@@ -69,7 +90,7 @@ export class VectorMap<U, V> {
   }
 
   /**
-   * get tail of map.
+   * Get tail of map.
    */
   get tail(): MapSource<U, V> | undefined {
     if (this.source.length > 0) {
@@ -123,7 +144,7 @@ export class VectorMap<U, V> {
   }
 
   /**
-   * clear map.
+   * Clear map.
    */
   clear() {
     this.pointer.clear();
@@ -226,7 +247,7 @@ export class VectorMap<U, V> {
   }
 
   /**
-   * add item in map and return its index.
+   * Add item in map and return its index.
    * @param key key.
    * @param value value.
    */
@@ -246,7 +267,7 @@ export class VectorMap<U, V> {
   }
 
   /**
-   * pop out last item like array.
+   * Pop out last item like array.
    */
   pop(): MapSource<U, V> | undefined {
     if (this.source.length > 0) {
