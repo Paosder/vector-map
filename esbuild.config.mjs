@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import esbuild from 'esbuild';
 
 esbuild.build({
@@ -6,7 +7,7 @@ esbuild.build({
   format: 'esm',
   sourcemap: true,
   outfile: 'dist/esm/index.js',
-  target: 'es2020',
+  target: 'es6',
   plugins: [],
   loader: {},
   external: [],
