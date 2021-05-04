@@ -4,16 +4,16 @@
 
 Vector like object using map with array.
 # Why?
-In ES6, Map is very useful key-value collection object.
-It is very efficient to access value via specific key and easy to delete too.
-However, sometimes we need to change item order for use like array or iterable.
-ES6 map cannot swap or change its order before transform to array(ex. `map.entries().forEach(..)`).
-One way to solve this, transform map to array, change its order, then re-transform into map.
-It seems really fair and simple approach, but then real big problem comes: changing its order.
-We cannot easily find where our item is in array, so we must traverse all items to find where it is and it consumes time complexity O(n).
+In ES6, Map is a very useful key-value collection object.
+Accessing values through specific keys is very efficient and easy to delete.
+However, sometimes we need to change item order for use like an array or iterable.
+ES6 map cannot swap or change its order before transforming into something(ex. array: `Array.from().forEach(..)`, iterator: `map.entries()`).
+One way to solve this, transform the map to an array, change its order, then re-transform it into a map.
+It seems really fair and simple approach, but then the real big problem comes: changing its order.
+We cannot easily find where our item is in the array, so we must traverse all items to find where it is and it consumes time complexity O(n).
 Well, if all items were sorted, we can reduce its time complexity to O(logn). However we cannot determine the original map was sorted, and
 we don't want to sort transformed array for just doing swap its order. It's "redundant" and "inefficient".
-VectorMap resolves such, especially swap case. VectorMap is concatenated map(pointer)-array(source) object. Map contains source pointer(array index), and array contains its value and key. We can access or delete value with time complexity O(1) via map-array. Though delete operation is actually swap with tail and pop so that causes cracking its original order, it has great performance O(1) and its really great to use with webGL instancing.
+VectorMap resolves such, especially the swap case. VectorMap is concatenated map(pointer)-array(source) object. The map contains the source pointer(array index), and the array contains its value and key. We can access or delete value with time complexity O(1) via map-array. Though delete operation is actually swap with tail and pop so that causes cracking its original order, it has great performance O(1) and its really great to use with webGL instancing.
 
 # Usage
 ```ts
