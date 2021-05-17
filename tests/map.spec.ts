@@ -462,3 +462,34 @@ describe('special situations', () => {
     expect(() => map.get('baz')).toThrowError('mangling pointer');
   });
 });
+
+describe('reverse', () => {
+  const map = new VectorMap<string, number>();
+
+  beforeEach(() => {
+    map.clear();
+    map.set('foo', 1);
+    map.set('bar', 2);
+    map.set('baz', 3);
+  });
+
+  test('reverse before init', () => {
+    const initialized = new VectorMap<string, number>();
+    expect(() => initialized.reverse()).not.toThrow();
+  });
+
+  test('reverse after init', () => {
+    map.reverse();
+    const reversedArray = map.map(({ value }) => value);
+
+    // check original key-value pairs.
+    expect(map.get('foo')).toEqual(1);
+    expect(map.get('bar')).toEqual(2);
+    expect(map.get('baz')).toEqual(3);
+
+    // check it reversed properly.
+    for (let i = 0; i < 3; i += 1) {
+      expect(reversedArray[i]).toEqual(3 - i);
+    }
+  });
+});

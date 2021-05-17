@@ -279,6 +279,17 @@ export class VectorMap<U, V> {
   }
 
   /**
+   * Reverse order of source array.
+   */
+  reverse() {
+    this.source.reverse();
+    this.source.forEach(({ key }, i) => {
+      // reconnect pointer.
+      this.pointer.set(key, i);
+    });
+  }
+
+  /**
    * Size of map.
    */
   get size() {
