@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.4](https://github.com/Paosder/vector-map/compare/v0.2.3...v0.2.4) (2021-05-27)
+
+
+### Features
+
+* has ([4550a04](https://github.com/Paosder/vector-map/commit/4550a0402cf96de76a03ce1535bf90f64d4a22b4))
+
 ### [0.2.3](https://github.com/Paosder/vector-map/compare/v0.2.2...v0.2.3) (2021-05-17)
 
 
