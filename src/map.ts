@@ -47,6 +47,7 @@ export class VectorMap<U, V> {
     this.swapIndex = this.swapIndex.bind(this);
     this.swapPointer = this.swapPointer.bind(this);
     this.get = this.get.bind(this);
+    this.has = this.has.bind(this);
     this.set = this.set.bind(this);
     this.getIndex = this.getIndex.bind(this);
     this.set = this.set.bind(this);
@@ -220,6 +221,14 @@ export class VectorMap<U, V> {
     const temp = this.source[i1];
     this.source[i1] = this.source[i2];
     this.source[i2] = temp;
+  }
+
+  /**
+   * Check if item exists.
+   * @param key key.
+   */
+  has(key: U): boolean {
+    return this.pointer.has(key);
   }
 
   /**

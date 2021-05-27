@@ -2,7 +2,7 @@
 import { VectorMap, MapSource } from '../src/map';
 
 describe('init', () => {
-  test('init with no default object', () => {
+  test('init without default object', () => {
     const map = new VectorMap();
   });
 
@@ -108,6 +108,34 @@ describe('get', () => {
     expect(map.get('foo2')).toEqual(undefined);
     expect(map.get('foo0')).toEqual(undefined);
     expect(map.get('')).toEqual(undefined);
+  });
+});
+
+describe('has', () => {
+  const map = new VectorMap<string, string>();
+
+  beforeAll(() => {
+    map.set('foo', 'bar');
+    map.set('bar', 'baz');
+    map.set('baz', 'foo');
+  });
+
+  test('item exists', () => {
+    expect(map.has('foo')).toEqual(true);
+  });
+
+  test('item exists after delete', () => {
+    map.delete('bar');
+    expect(map.has('foo')).toEqual(true);
+  });
+
+  test('item doesn\'t exists', () => {
+    expect(map.has('hello')).toEqual(false);
+  });
+
+  test('item doesn\'t exists after delete', () => {
+    map.delete('foo');
+    expect(map.has('foo')).toEqual(false);
   });
 });
 
