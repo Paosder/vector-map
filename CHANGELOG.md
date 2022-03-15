@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.5](https://github.com/Paosder/vector-map/compare/v0.2.4...v0.2.5) (2022-03-15)
+
+
+### Features
+
+* shallowClone ([#276](https://github.com/Paosder/vector-map/issues/276)) ([8b4574b](https://github.com/Paosder/vector-map/commit/8b4574b6c0a0a6e289275ad9f996106855553141))
+
 ### [0.2.4](https://github.com/Paosder/vector-map/compare/v0.2.3...v0.2.4) (2021-05-27)
 
 
