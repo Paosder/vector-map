@@ -521,3 +521,24 @@ describe('reverse', () => {
     }
   });
 });
+
+describe('shallowClone', () => {
+  const map = new VectorMap<string, number>();
+
+  beforeEach(() => {
+    map.clear();
+    map.set('foo', 1);
+    map.set('bar', 2);
+    map.set('baz', 3);
+  });
+
+  test('simple shallow clone', () => {
+    const cloned = map.shallowClone();
+
+    expect(cloned.size).toEqual(3);
+    expect(cloned.get('foo')).toEqual(1);
+    expect(cloned.get('bar')).toEqual(2);
+    expect(cloned.get('baz')).toEqual(3);
+    expect(cloned).not.toBe(map);
+  });
+});
