@@ -1,7 +1,7 @@
 {
   "name": "@paosder/vector-map",
   "homepage": "https://github.com/Paosder/vector-map",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "vector-like map class using es6 map with array.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -33,7 +33,7 @@
     "babel-jest": "^27.0.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "codecov": "^3.8.1",
-    "esbuild": "^0.13.3",
+    "esbuild": "^0.14.27",
     "eslint": "^7.23.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
