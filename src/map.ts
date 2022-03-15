@@ -52,6 +52,7 @@ export class VectorMap<U, V> {
     this.getIndex = this.getIndex.bind(this);
     this.set = this.set.bind(this);
     this.pop = this.pop.bind(this);
+    this.shallowClone = this.shallowClone.bind(this);
   }
 
   /**
@@ -296,6 +297,16 @@ export class VectorMap<U, V> {
       // reconnect pointer.
       this.pointer.set(key, i);
     });
+  }
+
+  /**
+   * shallow clone itself. Useful when use with immutable state management (ex. React state).
+   */
+  shallowClone(): VectorMap<U, V> {
+    const newMap = new VectorMap<U, V>();
+    newMap.pointer = this.pointer;
+    newMap.source = this.source;
+    return newMap;
   }
 
   /**
