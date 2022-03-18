@@ -9,10 +9,10 @@
   dependencies:
     commander "^2.15.1"
 
-"@paosder/vector-map@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/@paosder/vector-map/-/vector-map-0.1.6.tgz#a1632f734c338e6f0239357206036cf0c5f4ee26"
-  integrity sha512-LWh5kqdTI1U8Xb1l9HyZXPuPduDcqmc/CNQJXu9TbmQQIGVORm9wLUximAkutKFusIrEjQ9sMqFXTy7/xVfHLA==
+"@paosder/vector-map@^0.2.0":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@paosder/vector-map/-/vector-map-0.2.5.tgz#b6f18e034a17d55af3d7093984ffb39e4c280a76"
+  integrity sha512-++rE8HnY5/TWDUMjZ1lIWF0TVofCinVEbg3neLQ2twufIa9T93HxvurQ6In48E3J1/Ohg5jEs7jIJGBk7JEj6Q==
 
 "@snowpack/plugin-typescript@^1.2.0":
   version "1.2.1"
