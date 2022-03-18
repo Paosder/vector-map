@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "group:all",
+    ":ignoreUnstable",
+    ":semanticPrefixFixDepsChoreOthers",
+    ":updateNotScheduled",
+    ":automergeDisabled",
+    ":preserveSemverRanges"
+  ],
+  "schedule": [
+    "every weekday"
+  ],
+  "baseBranches": ["master"],
+  "rangeStrategy": "bump",
+  "ignoreDeps": []
+}
