@@ -30,8 +30,7 @@ jobs:
       - name: Coverage Report
         uses: codecov/codecov-action@v2
         with:
-          directory: ./coverage
-          files: ./clover.xml
+          files: ./coverage/clover.xml
           verbose: true
           version: latest
 
