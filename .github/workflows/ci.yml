@@ -27,3 +27,11 @@ jobs:
         uses: borales/actions-yarn@v2.3.0
         with:
           cmd: build # will run `yarn build` command
+      - name: Coverage Report
+        uses: codecov/codecov-action@v2
+        with:
+          directory: ./coverage
+          files: ./clover.xml
+          verbose: true
+          version: latest
+
