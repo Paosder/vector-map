@@ -305,7 +305,7 @@ export class VectorMap<U, V> {
   shallowClone(): VectorMap<U, V> {
     const newMap = new VectorMap<U, V>();
     newMap.pointer = this.pointer;
-    newMap.source = this.source;
+    newMap.source = this.source.slice();
     return newMap;
   }
 
