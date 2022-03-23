@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.6](https://github.com/Paosder/vector-map/compare/v0.2.5...v0.2.6) (2022-03-23)
+
+
+### Bug Fixes
+
+* pointing same source when shallow cloned ([e7afa72](https://github.com/Paosder/vector-map/commit/e7afa722aabad1ee775c42a93b5d72df3503910d))
+
 ### [0.2.5](https://github.com/Paosder/vector-map/compare/v0.2.4...v0.2.5) (2022-03-15)
 
 
