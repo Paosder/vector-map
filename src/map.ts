@@ -50,7 +50,6 @@ export class VectorMap<U, V> {
     this.has = this.has.bind(this);
     this.set = this.set.bind(this);
     this.getIndex = this.getIndex.bind(this);
-    this.set = this.set.bind(this);
     this.pop = this.pop.bind(this);
     this.shallowClone = this.shallowClone.bind(this);
   }
