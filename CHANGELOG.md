@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.2.8](https://github.com/Paosder/vector-map/compare/v0.2.7...v0.2.8) (2022-03-28)
+
+
+### Bug Fixes
+
+* remove duplicated binding in set ([8c49edd](https://github.com/Paosder/vector-map/commit/8c49eddc4aec7a37d2921509e44a7eba4d1517e2))
+
 ### [0.2.7](https://github.com/Paosder/vector-map/compare/v0.2.6...v0.2.7) (2022-03-23)
 
 ### [0.2.6](https://github.com/Paosder/vector-map/compare/v0.2.5...v0.2.6) (2022-03-23)
