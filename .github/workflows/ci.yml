@@ -28,7 +28,7 @@ jobs:
         with:
           cmd: build # will run `yarn build` command
       - name: Coverage Report
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           files: ./coverage/clover.xml
           verbose: true
