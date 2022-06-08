@@ -20,11 +20,11 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install deps
-        uses: borales/actions-yarn@v2.3.0
+        uses: borales/actions-yarn@v3.0.0
         with:
           cmd: install # will run `yarn install` command
       - name: build
-        uses: borales/actions-yarn@v2.3.0
+        uses: borales/actions-yarn@v3.0.0
         with:
           cmd: build # will run `yarn build` command
       - name: Coverage Report
