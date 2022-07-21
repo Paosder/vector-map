@@ -542,3 +542,25 @@ describe('shallowClone', () => {
     expect(cloned).not.toBe(map);
   });
 });
+
+describe('insertInto', () => {
+  const map = new VectorMap<string, number>();
+
+  beforeEach(() => {
+    map.clear();
+    map.set('foo', 1);
+    map.set('bar', 2);
+    map.set('baz', 3);
+  });
+
+  test('simple insertInto', () => {
+    const es6Map = new Map();
+    map.insertInto(es6Map);
+
+    expect(es6Map.size).toEqual(3);
+    expect(es6Map.get('foo')).toEqual(1);
+    expect(es6Map.get('bar')).toEqual(2);
+    expect(es6Map.get('baz')).toEqual(3);
+    expect(es6Map).not.toBe(map);
+  });
+});

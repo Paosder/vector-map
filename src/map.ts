@@ -52,6 +52,7 @@ export class VectorMap<U, V> {
     this.getIndex = this.getIndex.bind(this);
     this.pop = this.pop.bind(this);
     this.shallowClone = this.shallowClone.bind(this);
+    this.insertInto = this.insertInto.bind(this);
   }
 
   /**
@@ -313,5 +314,15 @@ export class VectorMap<U, V> {
    */
   get size() {
     return this.source.length;
+  }
+
+  /**
+   * insert data into target map.
+   * @param target target map reference.
+   */
+  insertInto(target: Map<U, V>) {
+    this.forEach(({ key, value }) => {
+      target.set(key, value);
+    });
   }
 }
