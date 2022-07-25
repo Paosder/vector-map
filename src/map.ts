@@ -53,6 +53,7 @@ export class VectorMap<U, V> {
     this.pop = this.pop.bind(this);
     this.shallowClone = this.shallowClone.bind(this);
     this.insertInto = this.insertInto.bind(this);
+    this.from = this.from.bind(this);
   }
 
   /**
@@ -323,6 +324,16 @@ export class VectorMap<U, V> {
   insertInto(target: Map<U, V>) {
     this.forEach(({ key, value }) => {
       target.set(key, value);
+    });
+  }
+
+  /**
+   * set data from target map reference.
+   * @param target target map reference.
+   */
+  from(target: Map<U, V>) {
+    target.forEach((value, key) => {
+      this.set(key, value);
     });
   }
 }

@@ -3,6 +3,7 @@ import { VectorMap, MapSource } from '../src/map';
 
 describe('init', () => {
   test('init without default object', () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const map = new VectorMap();
   });
 
@@ -240,8 +241,8 @@ describe('iterate', () => {
   });
 
   test('with Symbol.iterator', () => {
-    const resultKey = [];
-    const resultValue = [];
+    const resultKey: Array<string> = [];
+    const resultValue: Array<number> = [];
 
     for (const t of map) {
       resultKey.push(t.key);
@@ -253,7 +254,7 @@ describe('iterate', () => {
   });
 
   test('with forEach', () => {
-    const result = [];
+    const result: Array<{index: number, data: MapSource<string, number> }> = [];
     map.forEach((data, index) => {
       result.push({
         index,
@@ -292,7 +293,7 @@ describe('iterate', () => {
   });
 
   test('with reduce', () => {
-    const result = map.reduce((acc, data, index) => {
+    const result = map.reduce<Array<{index: number, data: MapSource<string, number> }>>((acc, data, index) => {
       acc.push({
         index,
         data,
@@ -562,5 +563,27 @@ describe('insertInto', () => {
     expect(es6Map.get('bar')).toEqual(2);
     expect(es6Map.get('baz')).toEqual(3);
     expect(es6Map).not.toBe(map);
+  });
+});
+
+describe('from', () => {
+  const es6Map = new Map<string, number>();
+
+  beforeEach(() => {
+    es6Map.clear();
+    es6Map.set('foo', 1);
+    es6Map.set('bar', 2);
+    es6Map.set('baz', 3);
+  });
+
+  test('simple from', () => {
+    const map = new VectorMap();
+    map.from(es6Map);
+
+    expect(map.size).toEqual(3);
+    expect(map.get('foo')).toEqual(1);
+    expect(map.get('bar')).toEqual(2);
+    expect(map.get('baz')).toEqual(3);
+    expect(map).not.toBe(es6Map);
   });
 });
