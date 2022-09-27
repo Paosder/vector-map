@@ -6,3 +6,11 @@ yarn-error.log*
 tsconfig.tsbuildinfo
 .DS_Store
 docs
+
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

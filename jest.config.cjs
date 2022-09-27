@@ -1,6 +1,7 @@
 const pack = require('./package');
 
-module.exports = {
+/** @type {import('jest').Config} */
+const config = {
   roots: [
     '<rootDir>/src',
     '<rootDir>/tests',
@@ -20,7 +21,6 @@ module.exports = {
   ],
   verbose: true,
   displayName: pack.name,
-  name: pack.name,
   transform: {
     '\\.[jt]sx?$': ['babel-jest', {
       configFile: './babel.config.cjs',
@@ -29,3 +29,5 @@ module.exports = {
   coverageDirectory: './coverage',
   setupFilesAfterEnv: ['./setup.js']
 };
+
+module.exports = config;
