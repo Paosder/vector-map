@@ -41,8 +41,8 @@ vectorMap.get('foo');
 vectorMap.swapSource('foo','bar');
 
 // vectorMap is iterable.
-for (const v of vectorMap) {
-  console.log(v.key, v.value);
+for (const value of vectorMap) {
+  console.log(value); // FooBar
 }
 
 // you can iterate item via forEach, map, reduce too.
