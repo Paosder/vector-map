@@ -1,0 +1,26 @@
+name: Publish Test version
+
+on: workflow_dispatch
+
+jobs:
+  publish_test_version:
+    runs-on: [ self-hosted ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+      - name: prepare yarn
+        run: |
+          corepack enable yarn
+          yarn config set npmScopes.xtrm.npmAuthToken ${{ secrets.NPM_PUBLISH_TOKEN }}
+      - uses: actions/github-script@v3
+        with:
+          script: |
+            const fs = require('fs');
+            const packageJson = JSON.parse(fs.readFileSync('package.json', { encoding: 'utf-8' }));
+            packageJson.version = `0.0.0-experimental-${Math.floor(Date.now() * 0.001)}`;
+            console.log(`test version: ${packageJson.version}`);
+            fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2));
+      - name: Publish package to npm registry
+        run: yarn npm publish
