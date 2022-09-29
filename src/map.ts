@@ -51,7 +51,7 @@ export class VectorMap<U, V> {
     this.set = this.set.bind(this);
     this.getIndex = this.getIndex.bind(this);
     this.pop = this.pop.bind(this);
-    this.shallowClone = this.shallowClone.bind(this);
+    this.clone = this.clone.bind(this);
     this.insertInto = this.insertInto.bind(this);
     this.from = this.from.bind(this);
   }
@@ -60,8 +60,8 @@ export class VectorMap<U, V> {
    * Iterate items. Same to Array.forEach in source array.
    * @param callback callback function to execute every iteration.
    */
-  forEach(callback: (data: MapSource<U, V>, index: number, arr: Array<MapSource<U, V>>) => any): void {
-    this.source.forEach(callback);
+  forEach(callback: (value: V, key: U, index: number, arr: Array<MapSource<U, V>>) => any): void {
+    this.source.forEach(({ key, value }, index, arr) => callback(value, key, index, arr));
   }
 
   /**
@@ -69,8 +69,8 @@ export class VectorMap<U, V> {
    * @param mapFunc map function to execute every iteration.
    * @returns Array<T>.
    */
-  map<T>(mapFunc: (data: MapSource<U, V>, index: number, arr: Array<MapSource<U, V>>) => T): Array<T> {
-    return this.source.map(mapFunc);
+  map<T>(mapFunc: (value: V, key: U, index: number, arr: Array<MapSource<U, V>>) => T): Array<T> {
+    return this.source.map(({ key, value }, index, arr) => mapFunc(value, key, index, arr));
   }
 
   /**
@@ -78,8 +78,8 @@ export class VectorMap<U, V> {
    * @param someFunc function to execute every iteration. Must return boolean type.
    * @returns boolean.
    */
-  some(someFunc: (data: MapSource<U, V>, index: number, arr: Array<MapSource<U, V>>) => boolean): boolean {
-    return this.source.some(someFunc);
+  some(someFunc: (value: V, key: U, index: number, arr: Array<MapSource<U, V>>) => boolean): boolean {
+    return this.source.some(({ key, value }, index, arr) => someFunc(value, key, index, arr));
   }
 
   /**
@@ -108,14 +108,30 @@ export class VectorMap<U, V> {
    * @param accumulator default value of accumulator.
    * @returns T
    */
-  reduce<T>(reducer: (acc: T, data: MapSource<U, V>, index: number,
+  reduce<T>(reducer: (acc: T, value: V, key: U, index: number,
     arr: Array<MapSource<U, V>>) => T, accumulator: T): T {
-    return this.source.reduce(reducer, accumulator);
+    return this.source.reduce((acc, { key, value }, index, arr) => reducer(acc, value, key, index, arr), accumulator);
+  }
+
+  /**
+   * Reduce map via filter function.
+   * @param filterFunc filter function to execute every iteration.
+   * If returns undefined, it won't be added in result array.
+   * @returns T
+   */
+  filterMap<T>(filterFunc: (value: V, key: U, index: number, arr: Array<MapSource<U, V>>) => T | undefined): Array<T> {
+    return this.source.reduce<Array<T>>((acc, { key, value }, index, arr) => {
+      const filterResult = filterFunc(value, key, index, arr);
+      if (filterResult !== undefined) {
+        acc.push(filterResult);
+      }
+      return acc;
+    }, []);
   }
 
   * [Symbol.iterator]() {
     for (let i = 0; i < this.source.length; i += 1) {
-      yield this.source[i];
+      yield this.source[i].value;
     }
   }
 
@@ -303,7 +319,7 @@ export class VectorMap<U, V> {
   /**
    * shallow clone itself. Useful when use with immutable state management (ex. React state).
    */
-  shallowClone(): VectorMap<U, V> {
+  clone(): VectorMap<U, V> {
     const newMap = new VectorMap<U, V>();
     newMap.pointer = this.pointer;
     newMap.source = this.source.slice();
@@ -322,7 +338,7 @@ export class VectorMap<U, V> {
    * @param target target map reference.
    */
   insertInto(target: Map<U, V>) {
-    this.forEach(({ key, value }) => {
+    this.forEach((value, key) => {
       target.set(key, value);
     });
   }

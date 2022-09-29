@@ -12,11 +12,15 @@ let objectCnt = 0;
 const cubeRenderer = (world.objects.get('cube') as CubeRenderer);
 
 function renderLoop() {
-  world.setCamera([
-    (10 + 100 * Math.sin((Math.PI * time * 0.1) / 180) ** 2) * Math.sin((Math.PI * time * 1) / 180),
-    100 * Math.sin((Math.PI * time * 0.2) / 180),
-    (10 + 100 * Math.sin((Math.PI * time * 0.1) / 180) ** 2) * Math.cos((Math.PI * time * 1) / 180)],
-  [0, 0, 0], [0, 1, 0]);
+  world.setCamera(
+    [
+      (10 + 100 * Math.sin((Math.PI * time * 0.1) / 180) ** 2) * Math.sin((Math.PI * time * 1) / 180),
+      100 * Math.sin((Math.PI * time * 0.2) / 180),
+      (10 + 100 * Math.sin((Math.PI * time * 0.1) / 180) ** 2) * Math.cos((Math.PI * time * 1) / 180)],
+    [0, 0, 0],
+
+    [0, 1, 0],
+  );
   for (let m = time % 3, i = m * 20000, len = 20000 * (m + 1); i < len && i < objectCnt; i += 1) {
     cubeRenderer.modify(`${i}`, {
       position: [

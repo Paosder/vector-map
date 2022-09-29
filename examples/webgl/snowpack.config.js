@@ -8,11 +8,7 @@ module.exports = {
   },
   plugins: [
     [
-      '@snowpack/plugin-typescript',
-      {
-        /* Yarn PnP workaround: see https://www.npmjs.com/package/@snowpack/plugin-typescript */
-        ...(process.versions.pnp ? { tsc: 'yarn pnpify tsc' } : {}),
-      },
+      '@snowpack/plugin-typescript'
     ],
     ['snowpack-plugin-glslify', { "compress": true }]
   ],
