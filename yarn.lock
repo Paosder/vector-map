@@ -606,18 +606,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@commitlint/travis-cli@npm:^17.1.2":
-  version: 17.1.2
-  resolution: "@commitlint/travis-cli@npm:17.1.2"
-  dependencies:
-    "@commitlint/cli": ^17.1.2
-    execa: ^5.0.0
-  bin:
-    commitlint-travis: cli.js
-  checksum: c98bf59ed07925ef432a91e61ea8a8ad15685651eb2605587fbd1c399d8f1c03bd440ce612ac9aa8da7b56afb3ff9f558683cdcb46c4ec169e37de27334504ac
-  languageName: node
-  linkType: hard
-
 "@commitlint/types@npm:^17.0.0":
   version: 17.0.0
   resolution: "@commitlint/types@npm:17.0.0"
@@ -1072,7 +1060,6 @@ __metadata:
   dependencies:
     "@commitlint/cli": ^17.1.2
     "@commitlint/config-conventional": ^17.1.0
-    "@commitlint/travis-cli": ^17.1.2
     "@types/jest": ^28
     "@typescript-eslint/eslint-plugin": ^5.38.1
     "@typescript-eslint/parser": ^5.38.1
