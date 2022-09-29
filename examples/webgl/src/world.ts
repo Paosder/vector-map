@@ -116,7 +116,7 @@ class World {
     const transformMat = this.isTransformDirty ? this.computeTransformMatrix() : undefined;
     this.isTransformDirty = false;
     this.objects.forEach((renderer) => {
-      this.lastRendered = renderer.value.render(this.lastRendered, transformMat);
+      this.lastRendered = renderer.render(this.lastRendered, transformMat);
     });
   }
 }
