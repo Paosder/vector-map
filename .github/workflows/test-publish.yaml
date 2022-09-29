@@ -6,15 +6,15 @@ jobs:
   publish_test_version:
     runs-on: [ self-hosted ]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
       - name: prepare yarn
         run: |
           corepack enable yarn
           yarn config set npmScopes.xtrm.npmAuthToken ${{ secrets.NPM_PUBLISH_TOKEN }}
-      - uses: actions/github-script@v3
+      - uses: actions/github-script@v6
         with:
           script: |
             const fs = require('fs');

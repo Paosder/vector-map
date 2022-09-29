@@ -17,7 +17,7 @@ jobs:
         run: |
           corepack enable yarn
           yarn config set npmScopes.paosder.npmAuthToken ${{ secrets.NPM_PUBLISH_TOKEN }}
-      - uses: actions/github-script@v3
+      - uses: actions/github-script@v6
         name: Modify package.json
         id: new-version
         with:
