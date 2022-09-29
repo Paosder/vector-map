@@ -28,9 +28,5 @@ jobs:
             console.log(`new version: ${packageJson.version}`);
             fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2));
             return `v${packageJson.version}`;
-      # - name: Check for modified files
-      #   id: git-check
-      #   run: echo ::set-output name=modified::$(if [ -n "$(git status --porcelain)" ]; then echo "true"; else echo "false"; fi)
       - name: Publish package to npm registry
-        # if: steps.git-check.outputs.modified == 'true'
         run: yarn npm publish
