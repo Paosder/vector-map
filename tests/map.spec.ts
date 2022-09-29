@@ -215,23 +215,14 @@ describe('delete', () => {
 describe('iterate', () => {
   const map = new VectorMap<string, number>();
   const expected = [{
-    index: 0,
-    data: {
-      key: 'foo',
-      value: 1,
-    },
+    key: 'foo',
+    value: 1,
   }, {
-    index: 1,
-    data: {
-      key: 'bar',
-      value: 2,
-    },
+    key: 'bar',
+    value: 2,
   }, {
-    index: 2,
-    data: {
-      key: 'baz',
-      value: 3,
-    },
+    key: 'baz',
+    value: 3,
   }];
 
   beforeAll(() => {
@@ -241,40 +232,37 @@ describe('iterate', () => {
   });
 
   test('with Symbol.iterator', () => {
-    const resultKey: Array<string> = [];
     const resultValue: Array<number> = [];
 
     for (const t of map) {
-      resultKey.push(t.key);
-      resultValue.push(t.value);
+      resultValue.push(t);
     }
 
-    expect(resultKey).toEqual(['foo', 'bar', 'baz']);
     expect(resultValue).toEqual([1, 2, 3]);
   });
 
   test('with forEach', () => {
-    const result: Array<{index: number, data: MapSource<string, number> }> = [];
-    map.forEach((data, index) => {
+    const result: Array<{key: string, value: number }> = [];
+    map.forEach((value, key) => {
       result.push({
-        index,
-        data,
+        key,
+        value,
       });
     });
     expect(result).toEqual(expected);
   });
 
   test('with map', () => {
-    const result = map.map((data, index) => ({
-      index,
-      data,
+    const result = map.map((value, key) => ({
+      key,
+      value,
     }));
     expect(result).toEqual(expected);
   });
 
   test('with some [true]', () => {
-    const result = map.some((data) => {
-      if (data.key === 'bar' && data.value === 2) {
+    const result = map.some((value, key) => {
+      if (key === 'bar' && value === 2) {
         return true;
       }
       return false;
@@ -283,8 +271,8 @@ describe('iterate', () => {
   });
 
   test('with some [false]', () => {
-    const result = map.some((data) => {
-      if (data.key === 'baz' && data.value === 0) {
+    const result = map.some((value, key) => {
+      if (key === 'baz' && value === 0) {
         return true;
       }
       return false;
@@ -293,14 +281,24 @@ describe('iterate', () => {
   });
 
   test('with reduce', () => {
-    const result = map.reduce<Array<{index: number, data: MapSource<string, number> }>>((acc, data, index) => {
+    const result = map.reduce<Array<{key: string, value: number }>>((acc, value, key) => {
       acc.push({
-        index,
-        data,
+        key,
+        value,
       });
       return acc;
     }, []);
     expect(result).toEqual(expected);
+  });
+
+  test('with filterMap', () => {
+    const result = map.filterMap((value, key) => {
+      if (value > 1) {
+        return key;
+      }
+      return undefined;
+    });
+    expect(result).toEqual(['bar', 'baz']);
   });
 });
 
@@ -320,16 +318,12 @@ describe('swap', () => {
     expect(map.get('foo')).toEqual(1);
     expect(map.get('bar')).toEqual(2);
 
-    const resultKey: Array<string> = [];
     const resultValue: Array<number> = [];
 
     for (const t of map) {
-      resultKey.push(t.key);
-      resultValue.push(t.value);
+      resultValue.push(t);
     }
 
-    expect(resultKey[0]).toEqual('bar');
-    expect(resultKey[1]).toEqual('foo');
     expect(resultValue[0]).toEqual(2);
     expect(resultValue[1]).toEqual(1);
   });
@@ -340,16 +334,12 @@ describe('swap', () => {
     expect(map.get('foo')).toEqual(1);
     expect(map.get('baz')).toEqual(3);
 
-    const resultKey: Array<string> = [];
     const resultValue: Array<number> = [];
 
     for (const t of map) {
-      resultKey.push(t.key);
-      resultValue.push(t.value);
+      resultValue.push(t);
     }
 
-    expect(resultKey[0]).toEqual('baz');
-    expect(resultKey[2]).toEqual('foo');
     expect(resultValue[0]).toEqual(3);
     expect(resultValue[2]).toEqual(1);
   });
@@ -360,16 +350,12 @@ describe('swap', () => {
     expect(map.get('foo')).toEqual(2);
     expect(map.get('bar')).toEqual(1);
 
-    const resultKey: Array<string> = [];
     const resultValue: Array<number> = [];
 
     for (const t of map) {
-      resultKey.push(t.key);
-      resultValue.push(t.value);
+      resultValue.push(t);
     }
 
-    expect(resultKey[0]).toEqual('bar');
-    expect(resultKey[1]).toEqual('foo');
     expect(resultValue[0]).toEqual(1);
     expect(resultValue[1]).toEqual(2);
   });
@@ -380,16 +366,12 @@ describe('swap', () => {
     expect(map.get('foo')).toEqual(2);
     expect(map.get('bar')).toEqual(1);
 
-    const resultKey: Array<string> = [];
     const resultValue: Array<number> = [];
 
     for (const t of map) {
-      resultKey.push(t.key);
-      resultValue.push(t.value);
+      resultValue.push(t);
     }
 
-    expect(resultKey[0]).toEqual('foo');
-    expect(resultKey[1]).toEqual('bar');
     expect(resultValue[0]).toEqual(2);
     expect(resultValue[1]).toEqual(1);
   });
@@ -509,7 +491,7 @@ describe('reverse', () => {
 
   test('reverse after init', () => {
     map.reverse();
-    const reversedArray = map.map(({ value }) => value);
+    const reversedArray = map.map((value) => value);
 
     // check original key-value pairs.
     expect(map.get('foo')).toEqual(1);
@@ -523,7 +505,7 @@ describe('reverse', () => {
   });
 });
 
-describe('shallowClone', () => {
+describe('clone', () => {
   const map = new VectorMap<string, number>();
 
   beforeEach(() => {
@@ -533,8 +515,8 @@ describe('shallowClone', () => {
     map.set('baz', 3);
   });
 
-  test('simple shallow clone', () => {
-    const cloned = map.shallowClone();
+  test('simple clone', () => {
+    const cloned = map.clone();
 
     expect(cloned.size).toEqual(3);
     expect(cloned.get('foo')).toEqual(1);

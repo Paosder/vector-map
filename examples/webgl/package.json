@@ -7,7 +7,7 @@
     "lint": "prettier --check \"src/**/*.{ts,js}\""
   },
   "dependencies": {
-    "@paosder/vector-map": "^0.2.0",
+    "@paosder/vector-map": "portal:../../",
     "gl-matrix": "^3.3.0"
   },
   "devDependencies": {

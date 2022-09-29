@@ -68,8 +68,16 @@ class World {
     this.objects.set('cube', new CubeRenderer(gl, vaoExt, instanced, 'cube'));
     this.lastRendered = '';
     this.cameraMatrix = mat4.identity(mat4.create());
-    this.projectionMatrix = mat4.perspective(mat4.create(),
-      Math.PI * 0.5, this.gl.canvas.width / this.gl.canvas.height, 1, Infinity);
+    this.projectionMatrix = mat4.perspective(
+      mat4.create(),
+      Math.PI * 0.5,
+
+      this.gl.canvas.width / this.gl.canvas.height,
+
+      1,
+
+      Infinity,
+    );
     this.eye = vec3.fromValues(3, 3, 5);
     this.lookAt = vec3.fromValues(1, 1, 0);
     mat4.lookAt(this.cameraMatrix, this.eye, this.lookAt, vec3.fromValues(0, 1, 0));
