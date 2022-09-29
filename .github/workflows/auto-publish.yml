@@ -30,4 +30,4 @@ jobs:
             fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2));
             return `v${packageJson.version}`;
       - name: Publish package to npm registry
-        run: yarn npm publish
+        run: yarn npm publish --access public
