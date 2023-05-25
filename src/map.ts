@@ -322,7 +322,7 @@ export class VectorMap<U, V> {
   clone(): VectorMap<U, V> {
     const newMap = new VectorMap<U, V>();
     newMap.pointer = this.pointer;
-    newMap.source = this.source.slice();
+    newMap.source = this.source;
     return newMap;
   }
 
