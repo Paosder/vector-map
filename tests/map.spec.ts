@@ -524,6 +524,39 @@ describe('clone', () => {
     expect(cloned.get('baz')).toEqual(3);
     expect(cloned).not.toBe(map);
   });
+
+  test('mutate after clone', () => {
+    const cloned = map.clone();
+    expect(cloned.size).toEqual(3);
+
+    cloned.set('foo', 2);
+    expect(cloned.get('foo')).toEqual(2);
+    expect(map.get('foo')).toEqual(2);
+
+    cloned.set('foo2', 1);
+    expect(cloned.size).toEqual(4);
+    expect(map.size).toEqual(4);
+    expect(cloned.get('foo2')).toEqual(1);
+    expect(map.get('foo2')).toEqual(1);
+
+    cloned.delete('foo2');
+    expect(cloned.size).toEqual(3);
+    expect(map.size).toEqual(3);
+
+    map.set('foo', 3);
+    expect(cloned.get('foo')).toEqual(3);
+    expect(map.get('foo')).toEqual(3);
+
+    map.set('foo2', 1);
+    expect(cloned.size).toEqual(4);
+    expect(map.size).toEqual(4);
+    expect(cloned.get('foo2')).toEqual(1);
+    expect(map.get('foo2')).toEqual(1);
+
+    map.delete('foo2');
+    expect(cloned.size).toEqual(3);
+    expect(map.size).toEqual(3);
+  });
 });
 
 describe('insertInto', () => {
