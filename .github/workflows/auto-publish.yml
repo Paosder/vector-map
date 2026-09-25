@@ -9,16 +9,16 @@ jobs:
   publish_new_version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 18
+          node-version: 24
       - name: prepare yarn
         run: |
           corepack enable yarn
           yarn config set npmScopes.paosder.npmAuthToken ${{ secrets.NPM_PUBLISH_TOKEN }}
           yarn install --immutable
-      - uses: actions/github-script@v3
+      - uses: actions/github-script@v9
         name: Modify package.json
         id: new-version
         with:
